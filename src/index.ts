@@ -1,11 +1,11 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import session from "express-session";
-import { User } from "./types/session";
 import f from "session-file-store";
-import {} from "passport-local";
 import passport from "passport";
+
 import login from "./route/login";
 import main from "./route/main";
+import passportConfig from "./passport";
 
 const app = express();
 const FileStore = f(session);
@@ -22,6 +22,10 @@ app.use(
     store: new FileStore(fileStoreOptions),
   })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
+passportConfig();
 
 app.use("/login", login);
 app.use("/", main);
